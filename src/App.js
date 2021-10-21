@@ -1,23 +1,34 @@
-import logo from './logo.svg';
+import { AutoComplete } from 'components/AutoComplete/AutoComplete';
+
 import './App.scss';
 
 function App() {
+  const getStuff = (keyword) => {
+    return fetch(`https://api.themoviedb.org/3/search/movie?query=${keyword}&api_key=fd3df6a6eee611c5c35c93dcf2125771`).then(response => {
+      return response.json();
+    });
+  }
+
+  const resultsComponent = ({ result }) => {
+    const fullPostPath = `https://image.tmdb.org/t/p/w45/${result.poster_path}`;
+    let imgEl = result.poster_path ? <img src={fullPostPath} alt={result.title} />: null;
+
+    return (
+      <>
+        { imgEl }
+        <span style={{ color: 'red' }}>{ result.title }</span>
+      </>
+    );
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+        <AutoComplete 
+          asyncFn={getStuff} 
+          minSearchLength={3}
+          responseMapper={(response) => response.results} 
+          onSelect={(result) => console.log(result) }
+          ResultsComponent={resultsComponent} />
     </div>
   );
 }

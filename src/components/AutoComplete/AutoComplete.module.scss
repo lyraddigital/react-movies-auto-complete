@@ -1,0 +1,10 @@
+.movieList {
+    padding: 0;
+    background: #EEE;
+    list-style: none;
+
+    li:hover {
+        background: #DDD;
+        cursor: pointer;
+    }
+}
