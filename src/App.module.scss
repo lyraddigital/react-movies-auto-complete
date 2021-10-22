@@ -1,0 +1,17 @@
+header {
+    display: flex;
+    justify-content: center;
+    background: #111;
+    padding: 10px;
+
+    .searchPanel {
+        flex: 1 0 0;
+        max-width: 600px;
+    }
+}
+
+@media (min-width: 768px) and (orientation: landscape) {
+    header {
+        justify-content: flex-start;
+    }
+}

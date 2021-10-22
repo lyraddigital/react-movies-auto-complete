@@ -5,7 +5,7 @@ import style from './AutoComplete.module.scss';
 export const AutoComplete = ({ asyncFn, minSearchLength, responseMapper, ResultsComponent, onSelect }) => {
     const [showResults, setShowResults] = useState(false);
     const [response, setResponse] = useState();
-    const [input, setInput] = useState();
+    const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
@@ -18,14 +18,28 @@ export const AutoComplete = ({ asyncFn, minSearchLength, responseMapper, Results
             }).finally(() => {
                 setIsLoading(false);
             });
+        } else if (input?.length < minSearchLength) {
+            setShowResults(false);
+            setResponse(undefined);
+        }     
+    }, [asyncFn, input, minSearchLength]);
+
+    useEffect(() => {
+        if (showResults) {
+            document.addEventListener('click', hideResults);
+            return () => { document.removeEventListener('click', hideResults); }
         }        
-    }, [asyncFn, input, minSearchLength])
+    }, [showResults]);
 
     const changeInput = (e) => {
         setInput(e.target.value);
     };
 
-    const hideResults = () => {
+    const clearInput = () => {
+        setInput('');
+    };
+
+    const hideResults = () => {        
         setShowResults(false);
     };
 
@@ -56,13 +70,15 @@ export const AutoComplete = ({ asyncFn, minSearchLength, responseMapper, Results
     }
 
     let loadingEl = isLoading ? <div>Loading...</div>: null;
+    const lilXEl = input?.length > 0 ? <button onClick={clearInput} className={ style.closeButton }>X</button> : null;
 
     return (
-        <>
-            <input className={ style.autoComplete } onBlur={hideResults} placeholder="Search Movies" defaultValue={input} onChange={changeInput} />
+        <div className={ style.moviesContainer }>
+            <input className={ style.autoComplete } placeholder="Search Movies" value={input} onChange={changeInput} />
+            { lilXEl }
             { loadingEl }
             { resultsEl }
-        </>
+        </div>
     );
 }
 

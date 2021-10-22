@@ -1,3 +1,9 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
 html, body {
     display: grid;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
@@ -7,9 +13,4 @@ html {
     background: url('../src/images/background.jpg') no-repeat center/cover;
     height: 100%;
     font-size: 10px;
-}
-
-body {
-    justify-items: center;
-    padding-top: 30vh;
 }

@@ -1,6 +1,6 @@
 import { AutoComplete } from 'components/AutoComplete/AutoComplete';
 
-import './App.scss';
+import style from './App.module.scss';
 
 function App() {
   const getStuff = (keyword) => {
@@ -11,25 +11,35 @@ function App() {
 
   const resultsComponent = ({ result }) => {
     const fullPostPath = `https://image.tmdb.org/t/p/w45/${result.poster_path}`;
-    let imgEl = result.poster_path ? <img src={fullPostPath} alt={result.title} />: null;
+    let imgEl = result.poster_path ? <img style={ { width: '45px', height: '68px' } } src={fullPostPath} alt={result.title} />: null;
+    const releaseDate = new Date(result.release_date);
+    console.log(result);
 
     return (
       <div style={{ display: 'flex', columnGap: '1.5rem' }}>
         { imgEl }
-        <span style={{ flex: '1', color: '#EEE' }}>{ result.title }</span>
+        <div style={{ flex: '1', color: '#EEE' }}>
+          <div>{ result.title } ({ releaseDate.getFullYear() })</div>
+          <div>{ result.vote_average }</div>
+        </div>
       </div>
     );
   };
 
   return (
-    <div>
-        <AutoComplete 
-          asyncFn={getStuff} 
-          minSearchLength={3}
-          responseMapper={(response) => response.results} 
-          onSelect={(result) => console.log(result) }
-          ResultsComponent={resultsComponent} />
-    </div>
+    <main>
+      <header>
+        <div className={ style.searchPanel }>
+          <AutoComplete 
+            asyncFn={getStuff} 
+            minSearchLength={3}
+            responseMapper={(response) => response.results} 
+            onSelect={(result) => console.log(result) }
+            ResultsComponent={resultsComponent} />
+        </div>
+      </header>
+        
+    </main>
   );
 }
 
