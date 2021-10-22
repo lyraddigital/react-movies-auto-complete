@@ -14,10 +14,10 @@ function App() {
     let imgEl = result.poster_path ? <img src={fullPostPath} alt={result.title} />: null;
 
     return (
-      <>
+      <div style={{ display: 'flex', columnGap: '1.5rem' }}>
         { imgEl }
-        <span style={{ color: 'red' }}>{ result.title }</span>
-      </>
+        <span style={{ flex: '1', color: '#EEE' }}>{ result.title }</span>
+      </div>
     );
   };
 
