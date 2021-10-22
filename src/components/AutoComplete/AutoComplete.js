@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import style from './AutoComplete.module.scss';
 
 export const AutoComplete = ({ asyncFn, minSearchLength, responseMapper, ResultsComponent, onSelect }) => {
+    const [showResults, setShowResults] = useState(false);
     const [response, setResponse] = useState();
     const [input, setInput] = useState();
     const [isLoading, setIsLoading] = useState(false);
@@ -12,6 +13,7 @@ export const AutoComplete = ({ asyncFn, minSearchLength, responseMapper, Results
             setIsLoading(true);
             
             asyncFn(input).then((asyncResponse) => {
+                setShowResults(true);
                 setResponse(asyncResponse);
             }).finally(() => {
                 setIsLoading(false);
@@ -21,6 +23,10 @@ export const AutoComplete = ({ asyncFn, minSearchLength, responseMapper, Results
 
     const changeInput = (e) => {
         setInput(e.target.value);
+    };
+
+    const hideResults = () => {
+        setShowResults(false);
     };
 
     const selectItem = (result) => {
@@ -33,7 +39,7 @@ export const AutoComplete = ({ asyncFn, minSearchLength, responseMapper, Results
 
     let resultsEl = null;
 
-    if (ResultsComponent && responseMapper && response) {
+    if (ResultsComponent && responseMapper && response && showResults) {
         const results = responseMapper(response);        
         
         if (results.length > 0) {
@@ -53,7 +59,7 @@ export const AutoComplete = ({ asyncFn, minSearchLength, responseMapper, Results
 
     return (
         <>
-            <input defaultValue={input} onChange={changeInput} />
+            <input className={ style.autoComplete } onBlur={hideResults} placeholder="Search Movies" defaultValue={input} onChange={changeInput} />
             { loadingEl }
             { resultsEl }
         </>
