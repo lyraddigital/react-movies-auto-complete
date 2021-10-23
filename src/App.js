@@ -1,44 +1,40 @@
+import { useState } from 'react';
+
+import { MOVIE_DETAILS_URL_PREFIX, SEARCH_API_URL_PREFIX } from 'core/constants';
+import { Config } from 'configuration/Config';
 import { AutoComplete } from 'components/AutoComplete/AutoComplete';
+import { SearchResult } from 'components/SearchResult/SearchResult';
+import { MovieDetails } from 'components/MovieDetails/MovieDetails';
 
 import style from './App.module.scss';
 
 function App() {
-  const getStuff = (keyword) => {
-    return fetch(`https://api.themoviedb.org/3/search/movie?query=${keyword}&api_key=fd3df6a6eee611c5c35c93dcf2125771`).then(response => {
-      return response.json();
-    });
+  const [result, setResult] = useState();
+
+  const getMoviesForKeyword = (keyword) => {
+    return fetch(`${SEARCH_API_URL_PREFIX}?query=${keyword}&api_key=${Config.apiKey}`)
+      .then(response => response.json());
   }
 
-  const resultsComponent = ({ result }) => {
-    const fullPostPath = `https://image.tmdb.org/t/p/w45/${result.poster_path}`;
-    let imgEl = result.poster_path ? <img style={ { width: '45px', height: '68px' } } src={fullPostPath} alt={result.title} />: null;
-    const releaseDate = new Date(result.release_date);
-    console.log(result);
-
-    return (
-      <div style={{ display: 'flex', columnGap: '1.5rem' }}>
-        { imgEl }
-        <div style={{ flex: '1', color: '#EEE' }}>
-          <div>{ result.title } ({ releaseDate.getFullYear() })</div>
-          <div>{ result.vote_average }</div>
-        </div>
-      </div>
-    );
+  const getMovieDetails = (result) => {
+    return fetch(`${MOVIE_DETAILS_URL_PREFIX}/${result.id}?api_key=${Config.apiKey}`)
+      .then(response => response.json())
+      .then(result => setResult(result));
   };
 
   return (
-    <main>
+    <main id={ style.layoutContainer }>
       <header>
         <div className={ style.searchPanel }>
           <AutoComplete 
-            asyncFn={getStuff} 
+            asyncFn={getMoviesForKeyword} 
             minSearchLength={3}
             responseMapper={(response) => response.results} 
-            onSelect={(result) => console.log(result) }
-            ResultsComponent={resultsComponent} />
+            onSelect={getMovieDetails}
+            ResultsComponent={SearchResult} />
         </div>
       </header>
-        
+      <MovieDetails details={result} />
     </main>
   );
 }

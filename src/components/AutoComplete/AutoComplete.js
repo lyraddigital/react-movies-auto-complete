@@ -6,17 +6,12 @@ export const AutoComplete = ({ asyncFn, minSearchLength, responseMapper, Results
     const [showResults, setShowResults] = useState(false);
     const [response, setResponse] = useState();
     const [input, setInput] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         if (asyncFn && input && input.length >= minSearchLength) {
-            setIsLoading(true);
-            
             asyncFn(input).then((asyncResponse) => {
                 setShowResults(true);
                 setResponse(asyncResponse);
-            }).finally(() => {
-                setIsLoading(false);
             });
         } else if (input?.length < minSearchLength) {
             setShowResults(false);
@@ -48,6 +43,8 @@ export const AutoComplete = ({ asyncFn, minSearchLength, responseMapper, Results
             onSelect(result);
         }
 
+        setInput('');
+        setShowResults(false);
         setResponse(undefined);
     };
 
@@ -69,14 +66,12 @@ export const AutoComplete = ({ asyncFn, minSearchLength, responseMapper, Results
         }        
     }
 
-    let loadingEl = isLoading ? <div>Loading...</div>: null;
     const lilXEl = input?.length > 0 ? <button onClick={clearInput} className={ style.closeButton }>X</button> : null;
 
     return (
         <div className={ style.moviesContainer }>
             <input className={ style.autoComplete } placeholder="Search Movies" value={input} onChange={changeInput} />
             { lilXEl }
-            { loadingEl }
             { resultsEl }
         </div>
     );

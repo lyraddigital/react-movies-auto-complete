@@ -1,0 +1,13 @@
+.searchResult { 
+    display: flex;
+    column-gap: 1.5rem;
+
+    .thumbnail {
+        width: 45px;
+        height: 68px;
+    }
+
+    .searchResultContent {
+        flex: 1;
+    }
+}

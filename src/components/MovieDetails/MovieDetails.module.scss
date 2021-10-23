@@ -1,0 +1,31 @@
+@import 'src/colours';
+
+#backdropImage {
+    display: flex;
+    flex: 1 0 0;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+
+    #backdropGradient {
+        display: flex;
+        flex: 1 0 0;
+        background: linear-gradient(to left, $movie-details-backdrop-left-colour 10%, $movie-details-backdrop-right-colour 60%);
+
+        #movieSection {
+            padding-top: 5vh;
+            padding-left: 5vw;
+            flex-basis: 40vw;
+
+            h2 {
+                font-size: 5rem;
+                margin-bottom: 2.5rem;
+            }
+
+            .overview {
+                font-size: 2.5rem;
+                line-height: 3.5rem;
+            }
+        }
+    }
+}
