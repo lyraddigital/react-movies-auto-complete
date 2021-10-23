@@ -9,7 +9,7 @@
         display: flex;
         justify-content: center;
         background: $top-bar-background-colour;
-        box-shadow: 0 2px 1px #111;
+        box-shadow: 0 2px 1px $header-box-shadow-colour;
         padding: 10px;
         z-index: 1000;
     
